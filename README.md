@@ -166,3 +166,27 @@ webpack.config.js에서 설정
     ]
   },
 ```
+
+## browserslist 
+
+.browserslistrc를 사용해 지원 브라우저 세팅을하고
+```js
+last 2 versions
+> 0.5%
+IE 10
+```
+npm run build-dev를 실행하면 main.css에 pre-fix가 붙음
+```css
+main {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+```
