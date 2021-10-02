@@ -60,7 +60,7 @@ development 모드로 실행하기 위해 package.json에 "build-dev": "webpack"
 
 ##  CSS, SASS, PostCSS, HMR
 
-css 파일을 생성하고 index.js에 import 한 뒤, npm run build를 실행하면 에러가 발생
+- css 파일을 생성하고 index.js에 import 한 뒤, npm run build를 실행하면 에러가 발생
 ```js
 You may need an appropriate loader to handle this file type, currently no loaders are configured to process this file. See https://webpack.js.org/concepts#loaders
 ```
@@ -108,5 +108,61 @@ import후에 plugin 설정하고 module에 추가
   <link rel="stylesheet" href="main.css" />
 ```
 
+- css파일을 scss파일로 설정한뒤, npm run build를 하면 로더가 없으므로 에러 발생
+```js
+You may need an appropriate loader to handle this file type, currently no loaders are configured to process this file.
+```
+sass 로더를 설치
+```js
+npm i -D sass sass-loader
+```
 
+webpack.config.js에서 rules를 수정
+```js
+  module: {
+    rules: [
+      {
+        test: /\.s?css$/i, // s?css는 css와 scss 둘다 test 가능함
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+        }
+      }
+    ]
+  },
+```
+main.css에 적용된것을 볼 수 있음
 
+- postCss를 적용시키기 위해 아래의 명령어를 실행
+```js
+npm i -D postcss postcss-preset-env postcss-loader
+```
+
+명령어 실행후, postcss.config.js 파일을 만들고 기본설정
+```js
+module.exports = {
+  plugins: ["postcss-preset-env"]
+}
+```
+webpack.config.js에서 설정
+```js
+  module: {
+    rules: [
+      {
+        test: /\.s?css$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "sass-loader"],
+      },
+      {
+        test: /\.js$/, 
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+        }
+      }
+    ]
+  },
+```
