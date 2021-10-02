@@ -1,10 +1,15 @@
+let mode = "development";
+
+if (process.env.NODE_ENV === "production") {
+  mode = "production";
+}
+
 module.exports = {
-  mode: "development",
+  mode,
 
   module: {
     rules: [
       {
-        // node_modules를 제외한 모든 js파일에 babel-loader를 사용
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
@@ -14,7 +19,7 @@ module.exports = {
     ]
   },
 
-  devtool: false,
+  devtool: "source-map",
   devServer: {
     // Live Reloading enabled.
     static: {
