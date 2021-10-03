@@ -231,3 +231,98 @@ jsx 파일을 만들고 npm run build를 실행시키면 에러발생. 아래의
     extensions: [".js", ".jsx"]
   },
 ```
+## Images
+
+webpack.config.js에 추가
+```js
+  module: {
+    rules: [
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: "asset/resouce",
+      },
+      {
+        test: /\.s?css$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "sass-loader"],
+      },
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+        }
+      }
+    ]
+  },
+```
+npm run build를 하면 dist파일에 이미지 파일들을 확인 가능
+
+아래의 코드를 사용하면 npm run build 이후, dist/images 폴더안에 이미지들을 확인할 수 있다.
+```js
+  output: {
+    assetModuleFilename: "images/[hash][ext]"
+  },
+```
+
+만약 타입을 asset/inline으로 지정하면 자바스크립트 파일안에 inline으로 이미지를 빌드함 (이미지 사이즈가 클 경우 비효율적)
+```js
+  module: {
+    rules: [
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: "asset/inline",
+      },
+      {
+        test: /\.s?css$/i,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: { publicPath: "" }
+          }
+          , "css-loader", "postcss-loader", "sass-loader"
+        ],
+      },
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+        }
+      }
+    ]
+  },
+```
+
+타입이 그냥 asset일 경우 웹팩이 사이즈를 보고 inline인지 image 디렉토리에 빌드한 이미지 파일들을 저장할 것인지 알아서 해준다
+```js
+module.exports = {
+  mode,
+  output: {
+    assetModuleFilename: "images/[hash][ext][query]"
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: "asset",
+      },
+      {
+        test: /\.s?css$/i,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: { publicPath: "" }
+          }
+          , "css-loader", "postcss-loader", "sass-loader"
+        ],
+      },
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+        }
+      }
+    ]
+  },
+```
