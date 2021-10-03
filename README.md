@@ -326,3 +326,45 @@ module.exports = {
     ]
   },
 ```
+
+##  Automated cleaning and html template
+
+html-webpack-plugin 설치
+```js
+npm i -D html-webpack-plugin
+```
+
+설치후에 webpack.config.js에서 import후에 세팅
+```js
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+plugins: [new MiniCssExtractPlugin(), new HtmlWebpackPlugin()],
+```
+
+세팅후에 npm run build를 실행하면 새로운 html 파일이 dist에 생성되지만 기본형태로만 자동생성되며 지정한 형태로 html이 생성되지 않으므로 template을 사용
+```js
+    new HtmlWebpackPlugin({
+      template: "./src/index.html"
+    })],
+```
+이후 npm run build를 실행하면 지정한 형태의 html 파일이 생성된 것을 확인 가능.
+
+필요없는 파일을 제거하기 위한 웹팩 플러그인 설치 후 세팅
+```js
+npm i -D clean-webpack-plugin
+
+// webpack.config.js
+const path = require("path");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+
+  output: {
+    path: path.resolve(__dirname, dist), // path.resolve는 절대경로를 나타내며 __dirname은 경로가 어디있는지 나타냄
+    assetModuleFilename: "images/[hash][ext][query]"
+  },
+
+  plugins: [
+    new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin(),
+    new HtmlWebpackPlugin({
+      template: "./src/index.html"
+    })],
+```
