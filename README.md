@@ -190,3 +190,44 @@ main {
           align-items: center;
 }
 ```
+
+## React with JSX
+
+```js
+npm i react react-dom
+npm i -D @babel/preset-react
+```
+위의 코드로 리액트와 preset-react 설치후 babel.config.js에 세팅
+```js
+module.exports = {
+  presets: [
+    "@babel/preset-env",
+    // { runtime: "automatic" }을 설정함으로써 컴포넌트에서 import React from 'react' 생략가능
+    ["@babel/preset-react", { runtime: "automatic" }]
+  ]
+}
+```
+
+jsx 파일을 만들고 npm run build를 실행시키면 에러발생. 아래의 코드로 해결 가능
+```js
+  module: {
+    rules: [
+      {
+        test: /\.s?css$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "sass-loader"],
+      },
+      {
+        // jsx일수도 아닐수도 있음
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+        }
+      }
+    ]
+  },
+
+  resolve: {
+    extensions: [".js", ".jsx"]
+  },
+```
